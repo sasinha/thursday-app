@@ -56,7 +56,16 @@ function App() {
       <button onClick={async() => {
         if (thursdayState === "inactive") {
           setThursdayState("initializing")
-          setRealtime(await init(oaiEventListenerMap))
+          console.log("initializing...")
+          try {
+            const realtime = init(oaiEventListenerMap)
+            if (realtime === "PermissionDenied") {
+              setThursdayState("Mic Permission Denied")
+            }
+            setRealtime(realtime)
+          } catch(error) {
+            console.error("Unable to init realtime", error)
+          }
         } else if (thursdayState === "listening") {
           close(realtime)
           setThursdayState("inactive")

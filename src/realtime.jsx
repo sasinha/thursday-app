@@ -1,4 +1,5 @@
 import {key} from "./key"
+import {getMic} from "./deviceAccess"
 
 export async function init(eventListenerMap={message: e => console.log(e)}) {
   // // Get an ephemeral key from your server - see server code below
@@ -15,9 +16,14 @@ export async function init(eventListenerMap={message: e => console.log(e)}) {
   pc.ontrack = e => audioEl.srcObject = e.streams[0];
 
   // Add local audio track for microphone input in the browser
-  const ms = await navigator.mediaDevices.getUserMedia({
-    audio: true
-  });
+  let ms
+  try {
+    ms = await getMic()
+    console.log({ms})
+  } catch (error) {
+    console.error("GetUserMediaError --- ", error)
+    throw error
+  }
   pc.addTrack(ms.getTracks()[0]);
 
   // Set up data channel for sending and receiving events
