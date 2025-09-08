@@ -55,7 +55,7 @@ export async function init(eventListenerMap={message: e => console.log(e)}) {
   };
   console.log(answer)
   await pc.setRemoteDescription(answer);
-
+  
   return {
     channel: dc,
     peerConnection: pc,

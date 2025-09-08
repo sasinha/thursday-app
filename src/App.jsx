@@ -57,15 +57,9 @@ function App() {
         if (thursdayState === "inactive") {
           setThursdayState("initializing")
           console.log("initializing...")
-          try {
-            const realtime = init(oaiEventListenerMap)
-            if (realtime === "PermissionDenied") {
-              setThursdayState("Mic Permission Denied")
-            }
-            setRealtime(realtime)
-          } catch(error) {
-            console.error("Unable to init realtime", error)
-          }
+          const realtime = await init(oaiEventListenerMap)
+          setRealtime(realtime)
+          console.log({realtime})
         } else if (thursdayState === "listening") {
           close(realtime)
           setThursdayState("inactive")
